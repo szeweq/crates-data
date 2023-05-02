@@ -6,7 +6,10 @@ import { z } from 'zod'
 const luck = z.number().min(1)
 const schemas = {
   emoji: z.record(z.object({luck, emoji: z.string().emoji()}, {description: 'Data'})),
-  letter: z.record(z.string().length(1), z.object({luck}))
+  letter: z.record(z.string().length(1), z.object({luck})),
+  steamgame: z.record(z.object({luck, id: z.number()})),
+  ytvideo: z.record(z.string(), {luck}),
+  ytuser: z.record(z.string(), {luck}),
 }
 
 async function validate() {
