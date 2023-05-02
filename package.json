@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\""
+    "test": "node validate.mjs"
   },
   "keywords": [],
   "author": "Szeweq",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "zod": "^3.21.4"
+  }
 }
