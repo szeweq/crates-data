@@ -14,7 +14,7 @@ const schemas = {
 
 async function validate() {
   const cdir = join('.', 'crates')
-  const dirs = await readdir(cdir)
+  const dirs = (await readdir(cdir)).filter(x => x != "index.json")
   for (let dt of dirs) {
     const dtpath = join(cdir, dt)
     const crates = await readdir(dtpath)
