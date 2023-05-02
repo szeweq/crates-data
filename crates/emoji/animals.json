@@ -1,0 +1,21 @@
+{
+  "dog": {"luck": 9, "emoji": "🐶"},
+  "cat": {"luck": 8, "emoji": "🐱"},
+  "bunny": {"luck": 7, "emoji": "🐰"},
+  "mouse": {"luck": 6, "emoji": "🐭"},
+  "guinea-pig": {"luck": 4, "emoji": "🐹"},
+  "bear": {"luck": 5, "emoji": "🐻"},
+  "panda": {"luck": 7, "emoji": "🐼"},
+  "koala": {"luck": 2, "emoji": "🐨"},
+  "lion": {"luck": 5, "emoji": "🦁"},
+  "tiger": {"luck": 4, "emoji": "🐯"},
+  "fox": {"luck": 7, "emoji": "🦊"},
+  "polar-bear": {"luck": 4, "emoji": "🐻‍❄️"},
+  "wolf": {"luck": 2, "emoji": "🐺"},
+  "zebra": {"luck": 3, "emoji": "🦓"},
+  "unicorn": {"luck": 1, "emoji": "🦄"},
+  "horse": {"luck": 6, "emoji": "🐴"},
+  "pig": {"luck": 9, "emoji": "🐷"},
+  "sheep": {"luck": 6, "emoji": "🐑"},
+  "llama": {"luck": 2, "emoji": "🦙"}
+}
