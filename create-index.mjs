@@ -6,6 +6,7 @@ async function createIndex() {
   const cdir = join('.', 'crates')
   const dirs = await readdir(cdir)
   for (let dt of dirs) {
+    if (dt == 'index.json') continue
     const dtpath = join(cdir, dt)
     const crates = await readdir(dtpath)
     out[dt] = crates.filter(x => x.endsWith(".json")).map(x => x.substring(0, x.length-5))
