@@ -9,6 +9,7 @@ The crate types define how an item should look and what data it should have. All
 - Steam Game ID
 - Youtube Video (using its ID)
 - Youtube User (name without `@`)
+- Emotes (FrankerFaceZ, BetterTTV, 7TV)
 
 ## Crate files
 Crates have its own unique file name. All crates are JSON objects with item name keys and data with luck values and other neccessary data.

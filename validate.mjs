@@ -10,6 +10,7 @@ const schemas = {
   steamgame: z.record(z.object({luck, id: z.number()})),
   ytvideo: z.record(z.string().regex(/^[\w\d_-]{11}$/), {luck}),
   ytuser: z.record(z.string(), {luck}),
+  emote: z.record(z.string(), {luck, src: z.enum(['f', 'b', 's']), id: z.string()})
 }
 
 async function validate() {
