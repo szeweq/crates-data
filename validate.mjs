@@ -8,9 +8,9 @@ const schemas = {
   emoji: z.record(z.object({luck, emoji: z.string().emoji()})),
   letter: z.record(z.string().length(1), z.object({luck})),
   steamgame: z.record(z.object({luck, id: z.number()})),
-  ytvideo: z.record(z.string().regex(/^[\w\d_-]{11}$/), {luck}),
-  ytuser: z.record(z.string(), {luck}),
-  emote: z.record(z.string(), {luck, src: z.enum(['f', 'b', 's']), id: z.string()})
+  ytvideo: z.record(z.string().regex(/^[\w\d_-]{11}$/), z.object({luck})),
+  ytuser: z.record(z.string(), z.object({luck})),
+  emote: z.record(z.string(), z.object({luck, src: z.enum(['f', 'b', 's']), id: z.string()}))
 }
 
 async function validate() {
