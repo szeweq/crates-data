@@ -1,5 +1,5 @@
 # crates-data
-A collection of crate opening data.
+A collection of crate opening data. This is currently used on my website: [crates.szeweq.xyz](https://crates.szeweq.xyz).
 
 ## Crate types
 The crate types define how an item should look and what data it should have. All files are contained in a directory which defines its type. These are the following types:
