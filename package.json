@@ -1,12 +1,18 @@
 {
   "name": "@szeweq/crates-data",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "A collection of crate opening data.",
-  "main": "crates/index.json",
+  "type": "module",
+  "main": "dist/index.json",
   "scripts": {
+    "build": "node gen.js",
     "test": "node validate.mjs"
   },
-  "keywords": ["crates", "opening", "cases"],
+  "keywords": [
+    "crates",
+    "opening",
+    "cases"
+  ],
   "author": "Szeweq",
   "license": "MIT",
   "repository": {
@@ -16,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/szeweq/crates-data/issues"
   },
-  "devDependencies": {
-    "zod": "^3.21.4"
-  }
+  "files": [
+    "/dist"
+  ]
 }
