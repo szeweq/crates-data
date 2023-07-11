@@ -20,7 +20,8 @@ const ANIMALS: &[(&str, &str, usize)] = &[
     ("horse", "🐴", 6),
     ("pig", "🐷", 9),
     ("sheep", "🐑", 6),
-    ("llama", "🦙", 2)
+    ("llama", "🦙", 2),
+    ("cow", "🐮", 8),
 ];
 
 pub(super) fn items(vec: &mut Vec<Item>) {
