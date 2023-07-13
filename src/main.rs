@@ -30,12 +30,14 @@ fn main() -> Result<(), generr::GenError> {
         map_by_type.entry(it.itype.group_name()).or_insert_with(Vec::new).push(name.clone());
     });
     map_by_type.iter_mut().for_each(|(_, v)| v.sort());
-    let mut loot_names = lp.loots.iter().map(|lt| lt.name.clone()).collect::<Vec<_>>();
-    loot_names.sort();
-    let loot_index = LootIndex{
-        types: &map_by_type, loots: &loot_names
-    };
 
+    let loot_costs = lp.loots.iter().map(|lt| {
+        let gsum = lt.items.iter().map(|&(_, l)| (l*l) as f64).sum::<f64>() / lt.items.len() as f64;
+        (lt.name.clone(), gsum.sqrt().round() as usize)
+    }).collect::<BTreeMap<_, _>>();
+    let loot_index = LootIndex{
+        types: &map_by_type, loots: &loot_costs
+    };
 
     write_json(pdist.join("index.json"), &loot_index)?;
 
@@ -64,5 +66,5 @@ fn write_json<P: AsRef<Path>, T: serde::ser::Serialize>(path: P, data: &T) -> Re
 #[derive(serde::Serialize)]
 struct LootIndex<'a> {
     types: &'a BTreeMap<&'static str, Vec<Name>>,
-    loots: &'a Vec<Name>
+    loots: &'a BTreeMap<Name, usize>
 }
