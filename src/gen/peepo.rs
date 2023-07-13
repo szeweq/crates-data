@@ -1,6 +1,5 @@
-use std::borrow::Cow;
 
-use super::{LootPack, Item, EmoteSrc, ItemType};
+use super::{LootPack, EmoteSrc, ItemType, ItemPack};
 
 const PEEPOS: &[(&str, EmoteSrc)] = &[
     ("peepoArrive", EmoteSrc::B("61afb90b002cdeedc21e9b73")),
@@ -56,9 +55,9 @@ const PEEPOS: &[(&str, EmoteSrc)] = &[
     ("peepoWTF", EmoteSrc::F("267880")),
 ];
 
-pub(super) fn items(vec: &mut Vec<Item>) {
+pub(super) fn items(ip: &mut ItemPack) {
     PEEPOS.iter().for_each(|(name, src)| {
-        vec.push(Item {name: Cow::Borrowed(name), itype: ItemType::Emote(src.clone()) });
+        ip.add_item(*name, src.clone());
     })
 }
 

@@ -1,5 +1,4 @@
-use std::borrow::Cow;
-use super::{ItemType, Item, LootPack};
+use super::{ItemType, LootPack, ItemPack, Emoji};
 
 const ANIMALS: &[(&str, &str, usize)] = &[
     ("dog", "🐶", 9),
@@ -22,14 +21,18 @@ const ANIMALS: &[(&str, &str, usize)] = &[
     ("sheep", "🐑", 6),
     ("llama", "🦙", 2),
     ("cow", "🐮", 8),
+    ("duck", "🦆", 6),
+    ("penguin", "🐧", 4),
+    ("flybug", "🪰", 8),
 ];
 
-pub(super) fn items(vec: &mut Vec<Item>) {
+pub(super) fn items(ip: &mut ItemPack) {
     ANIMALS.iter().for_each(|&(name, emoji, _)| {
-        vec.push(Item {name: Cow::Borrowed(name), itype: ItemType::Emoji{emoji}});
+        ip.add_item(name, Emoji(emoji));
     });
-    vec.push(Item {name: Cow::Borrowed("knife"), itype: ItemType::Emoji{emoji: "🔪"}});
-    vec.push(Item {name: Cow::Borrowed("pistol"), itype: ItemType::Emoji{emoji: "🔫"}});
+    ip.add_item("knife", Emoji("🔪"));
+    ip.add_item("pistol", Emoji("🔫"));
+    ip.add_item("glove", Emoji("🧤"));
 }
 
 pub(super) fn loots(lp: &mut LootPack) {
@@ -37,6 +40,6 @@ pub(super) fn loots(lp: &mut LootPack) {
         (lp.item(name), luck)
     }).collect::<Vec<_>>();
     lp.add_loot("animals", animv);
-    let rkv = vec![(lp.item("knife"), 1), (lp.item("pistol"), 99)];
-    lp.add_loot("rare-knife", rkv);
+    lp.add_loot("rare-knife", vec![(lp.item("knife"), 1), (lp.item("pistol"), 99)]);
+    lp.add_loot("rare-gloves", vec![(lp.item("knife"), 5), (lp.item("glove"), 95)]);
 }

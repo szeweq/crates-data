@@ -2,7 +2,7 @@ use std::{path::Path, fs::{self, File}, collections::{HashMap, BTreeMap}, rc::Rc
 
 use gen::Name;
 
-use crate::gen::LootPack;
+use crate::gen::{LootPack, ItemPack};
 
 mod gen;
 mod generr;
@@ -15,9 +15,9 @@ fn main() -> Result<(), generr::GenError> {
     fs::create_dir(pdist)?;
 
     let pg = gen::get_packgen();
-    let mut items = Vec::new();
-    pg.items.iter().for_each(|i| i.add_items(&mut items));
-    let items = items.into_iter()
+    let mut ip = ItemPack { items: Vec::new() };
+    pg.items.iter().for_each(|i| i.add_items(&mut ip));
+    let items = ip.items.into_iter()
         .map(|it| (it.name.clone(), Rc::new(it)))
         .collect::<HashMap<_, _>>();
     let mut lp = LootPack{

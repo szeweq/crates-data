@@ -1,11 +1,9 @@
-use std::borrow::Cow;
-
-use super::{Item, ItemType, LootPack};
+use super::{ItemPack, ItemType, LootPack};
 
 
-pub(super) fn items(vec: &mut Vec<Item>) {
+pub(super) fn items(ip: &mut ItemPack) {
     ('a'..='z').chain('A'..='Z').for_each(|c| {
-        vec.push(Item {name: Cow::Owned(c.to_string()), itype: ItemType::Letter(c as u8) });
+        ip.add_item(c.to_string(), ItemType::Letter(c as u8));
     });
 }
 pub(super) fn loots(lp: &mut LootPack) {
