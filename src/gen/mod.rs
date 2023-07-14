@@ -7,6 +7,11 @@ mod peepo;
 
 pub type Name = Cow<'static, str>;
 
+#[macro_export]
+macro_rules! lucks {
+    {$($name:literal: $luck:literal),+} => {[$(($name, $luck)),+]};
+}
+
 pub struct PackGen {
     pub items: Vec<Box<dyn ItemCreator>>,
     pub loots: Vec<Box<dyn LootCreator>>
@@ -26,7 +31,8 @@ impl<T: Fn(&mut LootPack)> LootCreator for T {
 
 pub struct Item {
     pub name: Name,
-    pub itype: ItemType
+    pub itype: ItemType,
+    pub cost: usize
 }
 pub struct Loot {
     pub name: Name,
@@ -37,8 +43,8 @@ pub struct ItemPack {
     pub items: Vec<Item>
 }
 impl ItemPack {
-    pub fn add_item(&mut self, name: impl Into<Name>, itype: impl Into<ItemType>) {
-        self.items.push(Item{name: name.into(), itype: itype.into()});
+    pub fn add_item(&mut self, name: impl Into<Name>, itype: impl Into<ItemType>, cost: usize) {
+        self.items.push(Item{name: name.into(), itype: itype.into(), cost});
     }
 }
 
@@ -48,10 +54,17 @@ pub struct LootPack {
 }
 impl LootPack {
     pub fn item(&self, name: impl Into<Name>) -> Rc<Item> {
-        self.items[&name.into()].clone()
+        let sname = name.into();
+        self.items.get(&sname).unwrap_or_else(|| panic!("Item not found: {}", sname)).clone()
     }
     pub fn add_loot(&mut self, name: impl Into<Name>, items: Vec<(Rc<Item>, usize)>) {
         self.loots.push(Loot{name: name.into(), items});
+    }
+    pub fn add_loot_names(&mut self, name: impl Into<Name>, items: impl IntoIterator<Item=(impl Into<Name>, usize)>) {
+        self.loots.push(Loot{
+            name: name.into(),
+            items: items.into_iter().map(|(name, count)| (self.item(name), count)).collect()
+        });
     }
 }
 

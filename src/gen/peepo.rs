@@ -55,9 +55,17 @@ const PEEPOS: &[(&str, EmoteSrc)] = &[
     ("peepoWTF", EmoteSrc::F("267880")),
 ];
 
+fn emote_cost(es: &EmoteSrc) -> usize {
+    match es {
+        EmoteSrc::B(_) => 2,
+        EmoteSrc::S(_) => 3,
+        _ => 1
+    }
+}
+
 pub(super) fn items(ip: &mut ItemPack) {
     PEEPOS.iter().for_each(|(name, src)| {
-        ip.add_item(*name, src.clone());
+        ip.add_item(*name, src.clone(), emote_cost(src));
     })
 }
 
@@ -65,13 +73,9 @@ pub(super) fn loots(lp: &mut LootPack) {
     let peepv = PEEPOS.iter().map(|(name, _)| {
         let it = lp.item(name.to_string());
         let luck: usize = if let ItemType::Emote(s) = &it.itype {
-            match s {
-                EmoteSrc::B(_) => 2,
-                EmoteSrc::S(_) => 3,
-                _ => 1
-            }
+            emote_cost(s)
         } else { 1 };
         (it, luck)
-    }).collect();
-    lp.add_loot("peepo", peepv);
+    });
+    lp.add_loot("peepo", peepv.collect());
 }

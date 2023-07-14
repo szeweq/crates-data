@@ -25,14 +25,19 @@ fn main() -> Result<(), generr::GenError> {
     };
     pg.loots.iter().for_each(|i| i.add_loots(&mut lp));
 
-    let mut map_by_type = BTreeMap::new();
-    lp.items.iter().for_each(|(name, it)| {
-        map_by_type.entry(it.itype.group_name()).or_insert_with(Vec::new).push(name.clone());
-    });
-    map_by_type.iter_mut().for_each(|(_, v)| v.sort());
+    let map_by_type = lp.items.iter()
+        .fold(BTreeMap::new(), |mut m, (name, it)| {
+            if m.entry(it.itype.group_name())
+                .or_insert_with(BTreeMap::new)
+                .insert(name.clone(), it.cost).is_some() {
+                panic!("Duplicate item: {}", name);
+            }
+            m
+        });
 
     let loot_costs = lp.loots.iter().map(|lt| {
-        let gsum = lt.items.iter().map(|&(_, l)| (l*l) as f64).sum::<f64>() / lt.items.len() as f64;
+        let costsum = lt.items.iter().map(|(_, l)| *l as f64).sum::<f64>();
+        let gsum = lt.items.iter().map(|(it, l)| (l*l*it.cost) as f64).sum::<f64>() / costsum;
         (lt.name.clone(), gsum.sqrt().round() as usize)
     }).collect::<BTreeMap<_, _>>();
     let loot_index = LootIndex{
@@ -44,7 +49,9 @@ fn main() -> Result<(), generr::GenError> {
     let items_dir = pdist.join("items");
     fs::create_dir(&items_dir)?;
     for (tp, nm) in map_by_type {
-        let vi = nm.iter().map(|n| (n, &lp.items[n].itype)).collect::<BTreeMap<_, _>>();
+        let vi = nm.keys()
+            .map(|n| (n, &lp.items[n].itype))
+            .collect::<BTreeMap<_, _>>();
         write_json(items_dir.join(format!("{tp}.json")), &vi)?;
     }
 
@@ -65,6 +72,6 @@ fn write_json<P: AsRef<Path>, T: serde::ser::Serialize>(path: P, data: &T) -> Re
 
 #[derive(serde::Serialize)]
 struct LootIndex<'a> {
-    types: &'a BTreeMap<&'static str, Vec<Name>>,
+    types: &'a BTreeMap<&'static str, BTreeMap<Name, usize>>,
     loots: &'a BTreeMap<Name, usize>
 }
