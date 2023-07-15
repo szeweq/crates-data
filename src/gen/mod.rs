@@ -74,12 +74,12 @@ pub enum ItemType {
     Emoji(Emoji), Emote(EmoteSrc), Letter(u8), Steam(SteamId)
 }
 impl ItemType {
-    pub fn group_name(&self) -> &'static str {
+    pub const fn group_name(&self) -> &'static str {
         match self {
-            ItemType::Emoji{..} => "emoji",
-            ItemType::Emote(_) => "emote",
-            ItemType::Letter(_) => "letter",
-            ItemType::Steam{..} => "steam",
+            Self::Emoji{..} => "emoji",
+            Self::Emote(_) => "emote",
+            Self::Letter(_) => "letter",
+            Self::Steam{..} => "steam",
         }
     }
 }

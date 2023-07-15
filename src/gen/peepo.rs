@@ -55,7 +55,7 @@ const PEEPOS: &[(&str, EmoteSrc)] = &[
     ("peepoWTF", EmoteSrc::F("267880")),
 ];
 
-fn emote_cost(es: &EmoteSrc) -> usize {
+const fn emote_cost(es: &EmoteSrc) -> usize {
     match es {
         EmoteSrc::B(_) => 2,
         EmoteSrc::S(_) => 3,
