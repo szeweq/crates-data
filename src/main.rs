@@ -8,6 +8,7 @@ mod gen;
 mod generr;
 
 fn main() -> Result<(), generr::GenError> {
+    let run_start = std::time::Instant::now();
     let pdist = Path::new("dist");
     if pdist.exists() {
         fs::remove_dir_all(pdist)?;
@@ -46,23 +47,11 @@ fn main() -> Result<(), generr::GenError> {
 
     write_json(pdist.join("index.json"), &loot_index)?;
 
-    let items_dir = pdist.join("items");
-    fs::create_dir(&items_dir)?;
-    for (tp, nm) in map_by_type {
-        let vi = nm.keys()
-            .map(|n| (n, &lp.items[n].itype))
-            .collect::<BTreeMap<_, _>>();
-        write_json(items_dir.join(format!("{tp}.json")), &vi)?;
-    }
-
-    let loots_dir = pdist.join("loots");
-    fs::create_dir(&loots_dir)?;
-    for lt in lp.loots {
-        let lit = lt.items.iter().map(|(n, luck)| (n.name.clone(), *luck)).collect::<BTreeMap<_, _>>();
-        write_json(loots_dir.join(format!("{}.json", lt.name)), &lit)?;
-    }
+    save_items_in_types(pdist, &lp, &map_by_type)?;
+    save_loots(pdist, &lp)?;
 
     println!("Generated!");
+    println!("Time elapsed: {:.2?}", run_start.elapsed());
     Ok(())
 }
 
@@ -74,4 +63,26 @@ fn write_json<P: AsRef<Path>, T: serde::ser::Serialize>(path: P, data: &T) -> Re
 struct LootIndex<'a> {
     types: &'a BTreeMap<&'static str, BTreeMap<Name, usize>>,
     loots: &'a BTreeMap<Name, usize>
+}
+
+fn save_items_in_types(out_dir: &Path, lp: &LootPack, items_by_type: &BTreeMap<&'static str, BTreeMap<Name, usize>>) -> Result<(), generr::GenError> {
+    let items_dir = out_dir.join("items");
+    fs::create_dir(&items_dir)?;
+    for (tp, nm) in items_by_type {
+        let vi = nm.keys()
+            .map(|n| (n, &lp.items[n].itype))
+            .collect::<BTreeMap<_, _>>();
+        write_json(items_dir.join(format!("{tp}.json")), &vi)?;
+    }
+    Ok(())
+}
+
+fn save_loots(out_dir: &Path, lp: &LootPack) -> Result<(), generr::GenError> {
+    let loots_dir = out_dir.join("loots");
+    fs::create_dir(&loots_dir)?;
+    for lt in &lp.loots {
+        let lit = lt.items.iter().map(|(n, luck)| (n.name.clone(), *luck)).collect::<BTreeMap<_, _>>();
+        write_json(loots_dir.join(format!("{}.json", lt.name)), &lit)?;
+    }
+    Ok(())
 }
