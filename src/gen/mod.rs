@@ -4,6 +4,7 @@ use serde::Serialize;
 mod emoji;
 mod letters;
 mod peepo;
+mod cats;
 
 pub type Name = Cow<'static, str>;
 
@@ -71,15 +72,16 @@ impl LootPack {
 #[derive(Serialize)]
 #[serde(untagged)]
 pub enum ItemType {
-    Emoji(Emoji), Emote(EmoteSrc), Letter(u8), Steam(SteamId)
+    Emoji(Emoji), Emote(EmoteSrc), Letter(u8), Steam(SteamId), YTVideo(YouTubeVideo)
 }
 impl ItemType {
     pub const fn group_name(&self) -> &'static str {
         match self {
-            Self::Emoji{..} => "emoji",
+            Self::Emoji(_) => "emoji",
             Self::Emote(_) => "emote",
             Self::Letter(_) => "letter",
-            Self::Steam{..} => "steam",
+            Self::Steam(_) => "steam",
+            Self::YTVideo(_) => "ytvideo"
         }
     }
 }
@@ -111,6 +113,9 @@ pub struct Emoji(&'static str);
 #[derive(Serialize)]
 pub struct SteamId { id: u64 }
 
+#[derive(Serialize)]
+pub struct YouTubeVideo { id: &'static str }
+
 macro_rules! fns_from_mods {
     ($($mod:ident)*) => { PackGen {
         items: vec![$(Box::new($mod::items)),*],
@@ -119,5 +124,5 @@ macro_rules! fns_from_mods {
 }
 
 pub fn get_packgen() -> PackGen {
-    fns_from_mods!(emoji letters peepo)
+    fns_from_mods!(emoji letters peepo cats)
 }
