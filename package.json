@@ -4,10 +4,6 @@
   "description": "A collection of crate opening data.",
   "type": "module",
   "main": "dist/index.json",
-  "scripts": {
-    "build": "node gen.js",
-    "test": "node validate.mjs"
-  },
   "keywords": [
     "crates",
     "opening",
