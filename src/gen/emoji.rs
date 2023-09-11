@@ -56,7 +56,8 @@ const_emojis!(VEGGIES {
     "🥒" as cucumber: 10,
     "🌽" as corn: 7,
     "🧅" as onion: 1,
-    "🥦" as broccoli: 8
+    "🥦" as broccoli: 8,
+    "🫚" as ginger: 7
 });
 const_emojis!(SWEETS {
     "🍬" as candy: 1,
@@ -69,11 +70,26 @@ const_emojis!(SWEETS {
     "🍫" as chocolate: 7,
     "🍮" as custard: 2,
     "🍩" as donut: 2,
-    "🍯" as honeypot: 20
+    "🍯" as honeypot: 20,
+    "🍧" as shavedice: 2
+});
+const_emojis!(BUILDINGS {
+    "🏠" as house: 2,
+    "🏡" as house2: 3,
+    "🏚️" as house3: 1,
+    "🏫" as school: 6,
+    "🏢" as office: 5,
+    "🏤" as postoffice: 4,
+    "🏰" as castle: 10,
+    "🏟️" as stadium: 8,
+    "🏨" as hotel: 8,
+    "🏥" as hospital: 7,
+    "🏭" as factory: 6,
+    "🏦" as bank: 10
 });
 
 pub(super) fn items(ip: &mut ItemPack) {
-    ANIMALS.iter().chain(FRUITS).chain(VEGGIES).chain(SWEETS).for_each(|&(name, emoji, cost)| {
+    ANIMALS.iter().chain(FRUITS).chain(VEGGIES).chain(SWEETS).chain(BUILDINGS).for_each(|&(name, emoji, cost)| {
         ip.add_item(name, Emoji(emoji), cost);
     });
     ip.add_item("knife", Emoji("🔪"), 3200);
@@ -129,7 +145,8 @@ pub(super) fn loots(lp: &mut LootPack) {
         "cucumber": 1,
         "corn": 2,
         "onion": 5,
-        "broccoli": 2
+        "broccoli": 2,
+        "ginger": 2
     });
     lp.add_loot_names("sweets", lucks!{
         "candy": 9,
@@ -142,7 +159,22 @@ pub(super) fn loots(lp: &mut LootPack) {
         "chocolate": 3,
         "custard": 8,
         "donut": 8,
-        "honeypot": 2
+        "honeypot": 2,
+        "shavedice": 7
+    });
+    lp.add_loot_names("buildings", lucks!{
+        "house": 10,
+        "house2": 8,
+        "house3": 12,
+        "school": 8,
+        "office": 7,
+        "postoffice": 7,
+        "castle": 1,
+        "stadium": 2,
+        "hotel": 3,
+        "hospital": 3,
+        "factory": 3,
+        "bank": 1
     });
     lp.add_loot_names("rare-knife", [("knife", 1), ("pistol", 99)]);
     lp.add_loot_names("rare-gloves", [("glove", 2), ("pistol", 98)]);
